@@ -16,5 +16,11 @@ pipeline {
                 sh 'docker image build -t akhil/saleor-dashboar:DEV .'
             }
         }
+        stage('push image to registry') {
+            steps {
+                // Push Docker image to the registry
+                sh 'docker image push akhil/saleor-dashboar:DEV'
+            }
+        }
     }
 }
