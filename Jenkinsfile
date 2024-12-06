@@ -13,13 +13,13 @@ pipeline {
         stage('docker image build') {
             steps {
                 // Build Docker image with the correct tag
-                sh 'docker image build -t shaikkhajaibrahim/saleor-dashboar:DEV .'
+                sh 'docker image build -t akhil/saleor-dashboar:DEV .'
             }
         }
         stage('push image to registry') {
             steps {
                 // Push Docker image to the registry
-                sh 'docker image push shaikkhajaibrahim/saleor-dashboar:DEV'
+                sh 'docker image push akhil/saleor-dashboar:DEV'
             }
         }
     }
