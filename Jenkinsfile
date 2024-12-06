@@ -1,27 +1,43 @@
 pipeline {
     agent any
-    triggers {
-        pollSCM('* * * * *')
+    environment {
+        DOCKER_IMAGE = "https://hub.docker.com/u/akhil1919:latest"
+        DOCKER_REGISTRY = "https://hub.docker.com/u/akhil1919"
+        DOCKER_CREDENTIALS = "123123" // Jenkins credentials ID for Docker login
     }
     stages {
-        stage('vcs') {
+        stage('Checkout Code') {
             steps {
-                git branch: 'main', url: 'https://github.com/WorkshopsByKhaja/saleor-dashboard.git'
+                git 'https://github.com/akhilbabu459/saleor-dashboard.git'
             }
         }
-        stage('docker image build') {
+        stage('Build Docker Image') {
             steps {
-                sh 'docker image build -t shaikkhajaibrahim/saleor-dashboard:DEV .'
+                script {
+                    sh 'docker build -t $DOCKER_IMAGE .'
+                }
             }
         }
-        stage('push image to registry') {
+        stage('Login to Docker Registry') {
             steps {
-                sh 'docker image push shaikkhajaibrahim/saleor-dashboard:DEV'
+                script {
+                    withCredentials([usernamePassword(credentialsId: "$DOCKER_CREDENTIALS", usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                        sh 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD $DOCKER_REGISTRY'
+                    }
+                }
             }
+        }
+        stage('Push Docker Image') {
+            steps {
+                script {
+                    sh 'docker push $DOCKER_IMAGE'
+                }
+            }
+        }
+    }
+    post {
+        always {
+            cleanWs() // Clean workspace after the job
         }
     }
 }
-
-
-
-
