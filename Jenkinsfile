@@ -1,13 +1,7 @@
-
-
 pipeline {
     agent any
     triggers {
         pollSCM('* * * * *')
-    }
-    environment {
-        DOCKER_USERNAME = 'akhilp95'
-        DOCKER_PASSWORD = 'Ramadevip@11'
     }
     stages {
         stage('vcs') {
@@ -17,15 +11,19 @@ pipeline {
         }
         stage('docker image build') {
             steps {
-                sh 'docker image build -t shaikkhajaibrahim/saleor-dashboar:DEV .'
+                // Correct the image tag here, ensure it's correctly named
+                sh 'docker image build -t shaikkhajaibrahim/saleor-dashboard:DEV .'
             }
         }
         stage('push image to registry') {
             steps {
-                sh 'echo $DOCKER_PASSWORD | docker login --username $DOCKER_USERNAME --password-stdin'
-                sh 'docker image push shaikkhajaibrahim/saleor-dashboar:DEV'
+                // Use Jenkins Credentials to securely handle Docker login
+                withCredentials([usernamePassword(credentialsId: 'docker-credentials-id', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                    sh 'echo $DOCKER_PASSWORD | docker login --username $DOCKER_USERNAME --password-stdin'
+                    // Push the image to Docker Hub
+                    sh 'docker image push shaikkhajaibrahim/saleor-dashboard:DEV'
+                }
             }
         }
     }
 }
-
