@@ -18,7 +18,7 @@ pipeline {
         stage('push image to registry') {
             steps {
                 // Use Jenkins credentials securely for Docker login
-                withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                withCredentials([usernamePassword(credentialsId: '12345', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                     // Login to Docker Hub using credentials
                     sh 'echo $DOCKER_PASSWORD | docker login --username $DOCKER_USERNAME --password-stdin'
                     // Push the Docker image to Docker Hub
