@@ -11,16 +11,17 @@ pipeline {
         }
         stage('docker image build') {
             steps {
-                // Correct the image tag here, ensure it's correctly named
+                // Fix the typo in the Docker image name
                 sh 'docker image build -t shaikkhajaibrahim/saleor-dashboard:DEV .'
             }
         }
         stage('push image to registry') {
             steps {
-                // Use Jenkins Credentials to securely handle Docker login
-                withCredentials([usernamePassword(credentialsId: 'docker-credentials-id', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                // Use Jenkins credentials securely for Docker login
+                withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                    // Login to Docker Hub using credentials
                     sh 'echo $DOCKER_PASSWORD | docker login --username $DOCKER_USERNAME --password-stdin'
-                    // Push the image to Docker Hub
+                    // Push the Docker image to Docker Hub
                     sh 'docker image push shaikkhajaibrahim/saleor-dashboard:DEV'
                 }
             }
