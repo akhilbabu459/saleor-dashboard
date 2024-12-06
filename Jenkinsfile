@@ -10,6 +10,11 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/akhilbabu459/saleor-dashboard.git'
             }
         }
-        
+        stage('docker image build') {
+            steps {
+                // Build Docker image with the correct tag
+                sh 'docker image build -t akhil/saleor-dashboar:DEV .'
+            }
+        }
     }
 }
