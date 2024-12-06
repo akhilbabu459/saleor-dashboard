@@ -14,10 +14,10 @@ pipeline {
                 sh 'docker image build -t akhilbabu459/saleor-dashboar:DEV .'
             }
         }
-        stage('push image to registry') {
-            steps {
-                sh 'docker image push akhilbabu459/saleor-dashboar:DEV'
-            }
-        }
+       // stage('push image to registry') {
+         //   steps {
+           //     sh 'docker image push akhilbabu459/saleor-dashboar:DEV'
+            //}
+        //}
     }
 }
